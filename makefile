@@ -50,4 +50,4 @@ run: floppy_image
 # Debug
 #
 debug: floppy_image
-	bochs -f bochs_config -q
+	bochsdbg -f bochs_config -q
