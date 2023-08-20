@@ -2,7 +2,7 @@ ASM=nasm
 
 BUILD_DIR=build
 
-.PHNONY: all floppy_image kernel bootloader clean always run
+.PHNONY: all floppy_image kernel bootloader clean always run debug
 
 #
 # Floppy Image
@@ -45,3 +45,9 @@ clean:
 #
 run: floppy_image
 	qemu-system-i386 -fda $(BUILD_DIR)/main_floppy.img
+
+#
+# Debug
+#
+debug: floppy_image
+	bochs -f bochs_config -q
