@@ -14,7 +14,7 @@ puts:
   push si
   push ax
 
-.loop
+.loop: ; Loop für puts
   lodsb       ; Lädt nächstes zeichen in al
   or al, al   ; prüfen, ob nächstes Zeichen null ist
   jz .done
@@ -49,7 +49,7 @@ main:
 
   hlt ;
 
-.halt
+.halt: ; HALT
   jmp .halt
 
 
