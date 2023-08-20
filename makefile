@@ -37,13 +37,13 @@ $(BUILD_DIR)\kernel.bin: always
 #
 tools_fat: $(BUILD_DIR)\tools\fat.exe
 $(BUILD_DIR)\tools\fat.exe: always $(TOOLS_DIR)\fat\fat.c
-	if not exist $(BUILD_DIR)\tools mkdir -p $(BUILD_DIR)\tools
+	if not exist $(BUILD_DIR)\tools mkdir $(BUILD_DIR)\tools
 	$(CC) -g -o $(BUILD_DIR)\tools\fat.exe tools\fat\fat.c
 #
 # Always
 #
 always:
-	if not exist $(BUILD_DIR) mkdir -p $(BUILD_DIR)
+	if not exist $(BUILD_DIR) mkdir $(BUILD_DIR)
 
 #
 # Clean
