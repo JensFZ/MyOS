@@ -90,7 +90,8 @@ main:
   call disk_read
 
 
-  hlt ;
+  cli ; Interrupts deaktivieren
+  hlt ; HALT
 
 floppy_error:
   mov si, floppy_error_msg
