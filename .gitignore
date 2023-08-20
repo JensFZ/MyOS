@@ -23,3 +23,6 @@
 *.hex
 
 build/
+
+#Bochs
+bx_enh_dbg.ini
