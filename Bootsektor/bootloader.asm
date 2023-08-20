@@ -1,22 +1,60 @@
-global loader ; make loader visible for the linker
-extern main   ; main function of the C kernel
+org 0x7C00 ; 
+bits 16 ; 16-Bit design
 
-FLAGS		equ 0
-MAGIC   	equ 0x1BADB002		; Magicnumber for Grub
-CHECKSUM	equ -(MAGIC+FLAGS) 	; Checksum
+%define ENDL 0x0D, 0x0A ; Newline + Character Return
 
-section .text
-align 4
-MultiBootHeader:
-  dd MAGIC
-  dd FLAGS
-  dd CHECKSUM
+start:
+  jmp main
 
-loader:
-  mov esp, 0x200000 	; Set stack to 2MB
-  push eax		; Multiboot Magicnumber pushed to stack
-  push ebx		; push Multiboot structure address to stack
-  call main		; call C kernel main function
+; Schreibt ein String auf den Bildschirm
+; Params:
+;   - ds:si zeigt auf String
 
-  cli			; if kernel reaches this point -> halt CPU
-  hlt
+puts:
+  push si
+  push ax
+
+.loop
+  lodsb       ; Lädt nächstes zeichen in al
+  or al, al   ; prüfen, ob nächstes Zeichen null ist
+  jz .done
+
+  mov ah, 0x0e
+  mov bh, 0
+  int 0x10
+
+  jmp .loop
+
+.done:
+  pop ax
+  pop si
+  ret
+
+main:
+
+  ; Setup data
+
+  mov ax, 0    ; es kann nicht direkt in ds und es geschrieben werden
+  mov ds, ax
+  mov es, ax
+
+
+  ;setup stack
+  mov ss, ax
+  mov sp, 0x7C00 ; Stack wächst nach unten -> liegt unterhalb dieses Blocks
+
+  mov si, msg_hello
+  call puts
+
+
+  hlt ;
+
+.halt
+  jmp .halt
+
+
+msg_hello: db 'Welcome to MyOS', ENDL, 0
+
+times 510-($-$$) db 0 ; 510 - (aktuelle Position - aktuelle sektion) mit 0 auffüllen -> immer 512 bytes 
+
+dw 0AA55h
