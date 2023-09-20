@@ -77,10 +77,10 @@ start:
   mov [dbd_sectors_per_track], cx ; cx = cl + ch * 256
 
   inc dh ; dh = 0
-  mov [dbd_heads], dh ; dx = dl + dh * 256
+  mov [dbd_heads], dh ; dh = dh + 1
 
   ; root diektory entries (reserved sectors + sectors per track * number of fats)
-  mov ax, [dbd_sectors_per_track] ; ax = dbd_sectors_per_track
+  mov ax, [dbd_sectors_per_fat] ; ax = dbd_sectors_per_fat
   mov bl, [dbd_fats]              ; bl = dbd_fats
   xor bh, bh                      ; bh = 0
   mul bx                          ; ax = ax * bx
@@ -88,7 +88,7 @@ start:
   push ax                         ; ax auf stack                   
   
   ; größe des root directory = (32 * dbd_root_entries) / dbd_bytes
-  mov ax, [dbd_sectors_per_fat]   ; ax = dbd_sectors_per_fat
+  mov ax, [dbd_root_entries]   ; ax = dbd_sectors_per_fat
   shl ax, 5                       ; ax = ax * 32
   xor dx, dx                      ; dx = 0
   div word [dbd_bytes]            ; ax = ax / dbd_bytes, dx = ax % dbd_bytes
@@ -295,8 +295,6 @@ disk_read:
 
   mov ah, 02h
   mov di, 3
-
-  int 3h
 
 .retry:
   pusha; alle register auf stack
