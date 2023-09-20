@@ -31,7 +31,7 @@ ebr_drive: db 0 ; Drive Number
 ebr_reserved: db 0 ; Reserved
 ebr_signature: db 29h ; Extended Boot Record Signature
 ebr_volume_id: dd 0 ; Volume ID
-ebr_volume_label: db 'MYOS BOOT ', 0 ; Volume Label
+ebr_volume_label: db 'MYOS BOOT ' ; Volume Label
 ebr_filesystem: db 'FAT12   ' ; Filesystem Type
 
 
@@ -68,6 +68,7 @@ start:
   push es
   mov ah, 08h
   int 13h
+
   jc floppy_error
   pop es
 
@@ -76,7 +77,7 @@ start:
   mov [dbd_sectors_per_track], cx ; cx = cl + ch * 256
 
   inc dh ; dh = 0
-  mov [dbd_heads], dx ; dx = dl + dh * 256
+  mov [dbd_heads], dh ; dx = dl + dh * 256
 
   ; root diektory entries (reserved sectors + sectors per track * number of fats)
   mov ax, [dbd_sectors_per_track] ; ax = dbd_sectors_per_track
@@ -294,6 +295,9 @@ disk_read:
 
   mov ah, 02h
   mov di, 3
+
+  int 3h
+
 .retry:
   pusha; alle register auf stack
   stc ; set carry flag
@@ -304,7 +308,9 @@ disk_read:
   call disk_reset
 
   dec di
+
   test di, di
+
   jnz .retry
 
 .fail:
@@ -338,7 +344,7 @@ disk_reset:
 
 msg_hello:                  db 'Lade MyOS', ENDL, 0
 floppy_error_msg:           db 'Floppy error', ENDL, 0
-kernel_not_found_error_msg: db 'KERNEL.BIN not found', ENDL, 0
+kernel_not_found_error_msg: db 'KERNEL not found', ENDL, 0
 file_kernel_bin:            db 'KERNEL  BIN'
 kernel_cluster:             dw 0
 

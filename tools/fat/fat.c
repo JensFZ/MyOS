@@ -55,7 +55,7 @@ DirectoryEntry* rootDirectory = NULL; // root directory
 uint32_t rootDirectoryEnd; // end of root directory
 
 bool readBootSector(FILE* disk) { // read boot sector
-    return fread(&bootSector, sizeof(BootSector), 1, disk) > 0; // read boot sector
+    return fread(&bootSector, sizeof(bootSector), 1, disk) > 0; // read boot sector
 }
 
 
