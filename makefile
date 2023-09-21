@@ -23,7 +23,7 @@ $(BUILD_DIR)\main_floppy.img: bootloader kernel
 #
 bootloader: $(BUILD_DIR)\bootloader.bin
 $(BUILD_DIR)\bootloader.bin: always
-	$(ASM) Bootsektor\bootloader.asm -f bin -O0 -o $(BUILD_DIR)\bootloader.bin
+	$(ASM) Bootsektor\bootloader.asm -f bin -o $(BUILD_DIR)\bootloader.bin
 
 #
 # Kernel
