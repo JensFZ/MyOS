@@ -139,7 +139,7 @@ start:
   ; lese kernel.bin
   mov bx, KERNEL_LOAD_SEGMENT    ; es:bx = KERNEL_LOAD_SEGMENT
   mov es, bx
-  mov bx, KERNEL_LOAD_OFFSET     ; es:bx = KERNEL_LOAD_OFFSET
+  mov bx, KERNEL_LOAD_OFFSET     ; bx = KERNEL_LOAD_OFFSET
 
 .load_kernel_loop:
   ; lese nächsten cluster
@@ -349,7 +349,7 @@ kernel_cluster:             dw 0
 KERNEL_LOAD_SEGMENT         equ 0x2000
 KERNEL_LOAD_OFFSET          equ 0x0000
 
-times 510-($-$$) db 0 ; 510 - (aktuelle Position - aktuelle sektion) mit 0 auffüllen -> immer 512 bytes 
+times 510-($-$$) db 0 ; 510 - (aktuelle Position - aktuelle sektion) mit 0 auffüllen -> immer 512(eigentlich 510, da noch zwei byte kommen) bytes 
 
 dw 0AA55h
 
