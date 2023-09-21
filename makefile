@@ -1,8 +1,11 @@
 ASM=nasm
-
+CC=gcc	
 BUILD_DIR=build
+TOOLS_DIR=tools
 
-.PHNONY: all floppy_image kernel bootloader clean always run debug
+.PHNONY: all floppy_image kernel bootloader clean always run debug tools_fat
+
+all: floppy_image tools_fat
 
 #
 # Floppy Image
@@ -13,6 +16,7 @@ $(BUILD_DIR)\main_floppy.img: bootloader kernel
 	wsl mkfs.fat -F 12 -n "MyOS" $(BUILD_DIR)/main_floppy.img
 	wsl dd if=$(BUILD_DIR)/bootloader.bin of=$(BUILD_DIR)/main_floppy.img conv=notrunc
 	wsl mcopy -i $(BUILD_DIR)/main_floppy.img $(BUILD_DIR)/kernel.bin "::kernel.bin"
+	wsl mcopy -i $(BUILD_DIR)/main_floppy.img test.txt "::test.txt"
 
 #
 # Bootloader
@@ -29,10 +33,17 @@ $(BUILD_DIR)\kernel.bin: always
 	$(ASM) Kernel\main.asm -f bin -o $(BUILD_DIR)\kernel.bin
 
 #
+# Tools FAT
+#
+tools_fat: $(BUILD_DIR)\tools\fat.exe
+$(BUILD_DIR)\tools\fat.exe: always $(TOOLS_DIR)\fat\fat.c
+	if not exist $(BUILD_DIR)\tools mkdir $(BUILD_DIR)\tools
+	$(CC) -g -o $(BUILD_DIR)\tools\fat.exe tools\fat\fat.c
+#
 # Always
 #
 always:
-	if not exist $(BUILD_DIR) mkdir -p $(BUILD_DIR)
+	if not exist $(BUILD_DIR) mkdir $(BUILD_DIR)
 
 #
 # Clean
