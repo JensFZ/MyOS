@@ -16,6 +16,7 @@ start:
 puts:
   push si
   push ax
+  push bx
 
 .loop: ; Loop für puts
   lodsb       ; Lädt nächstes zeichen in al
@@ -29,6 +30,7 @@ puts:
   jmp .loop
 
 .done:
+  pop bx
   pop ax
   pop si
   ret
