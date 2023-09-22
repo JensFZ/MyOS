@@ -21,9 +21,16 @@ $(BUILD_DIR)\main_floppy.img: bootloader kernel
 #
 # Bootloader
 #
-bootloader: $(BUILD_DIR)\bootloader.bin
-$(BUILD_DIR)\bootloader.bin: always
-	$(ASM) Bootsektor\bootloader.asm -f bin -o $(BUILD_DIR)\bootloader.bin
+bootloader: stage1 stage2
+
+stage1: $(BUILD_DIR)\stage1.bin
+
+$(BUILD_DIR)\stage1.bin: always
+	$(MAKE) -C $(SRC_DIR)Bootsektor/Stage1 BUILD_DIR=$(BUILD_DIR)\stage1
+
+
+# $(BUILD_DIR)\stage1.bin: always
+# 	$(ASM) Bootsektor\Stage1\bootloader.asm -f bin -o $(BUILD_DIR)\bootloader.bin
 
 #
 # Kernel

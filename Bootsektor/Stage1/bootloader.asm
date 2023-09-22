@@ -342,8 +342,8 @@ disk_reset:
 
 msg_hello:                  db 'Lade MyOS', ENDL, 0
 floppy_error_msg:           db 'Floppy error', ENDL, 0
-kernel_not_found_error_msg: db 'KERNEL not found', ENDL, 0
-file_kernel_bin:            db 'KERNEL  BIN'
+kernel_not_found_error_msg: db 'STAGE2 not found', ENDL, 0
+file_kernel_bin:            db 'STAGE2  BIN'
 kernel_cluster:             dw 0
 
 KERNEL_LOAD_SEGMENT         equ 0x2000
